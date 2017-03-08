@@ -1,0 +1,18 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+ config.vm.define "ubuntu" do |v|
+         v.vm.box = "puppetlabs/ubuntu-16.04-64-puppet"
+         #v.vm.box = "hashicorp/precise64"
+         v.vm.hostname = "gitlab"
+         v.vm.network :private_network, ip: "192.168.78.121"
+         v.vm.provision :shell, path: "provision.sh"
+ end
+ config.vm.provider "virtualbox" do |vb|
+        vb.cpus = 1
+        vb.memory = 1500
+        vb.name = "gitlab"
+ end
+ end

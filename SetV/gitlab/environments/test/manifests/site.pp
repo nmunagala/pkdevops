@@ -1,0 +1,5 @@
+node /^gitlab/ {
+
+include gitlab
+
+}

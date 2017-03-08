@@ -1,0 +1,26 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "puppetlabs/centos-7.2-64-puppet"
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
+    vb.memory = 1536
+  end
+
+
+  config.vm.define "gitlab-pk", autostart: false do |gitlab|
+    gitlab.vm.hostname = "gitlab1.pkdevops.com"
+    gitlab.vm.network :private_network, ip: "192.168.78.133"
+    config.vm.provision "shell", path: "environments/test/manifests/gitlab.sh" 
+    config.vm.provision "puppet" do |puppet|
+       puppet.environment_path = "environments"
+       puppet.environment = "test"
+       puppet.options = "--verbose --debug"
+    end
+  end
+
+	config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+  end

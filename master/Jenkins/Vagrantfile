@@ -1,0 +1,53 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "centos/7"
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
+    vb.memory = 1024
+  end
+
+
+  config.vm.define "jenkins", autostart: true do |jenkins|
+    jenkins.vm.hostname = "jenkins.pkdevops.com"
+    jenkins.vm.network :private_network, ip: "192.168.251.40"
+      config.vm.provision "shell", path: "environments/test/shell/puppet.sh" 
+      config.vm.provision "puppet" do |puppet|
+         puppet.environment_path = "environments"
+         puppet.environment = "test"
+         puppet.options = "--verbose --debug"
+      end
+  end
+
+  config.vm.define "nexus", autostart: true do |nexus|
+    nexus.vm.hostname = "nexus.pkdevops.com"
+    nexus.vm.network :private_network, ip: "192.168.251.41"
+      config.vm.provision "shell", path: "environments/test/shell/puppet.sh" 
+      config.vm.provision "puppet" do |puppet|
+         puppet.environment_path = "environments"
+         puppet.environment = "test"
+         puppet.options = "--verbose --debug"
+      end
+  end
+  
+  config.vm.define "tomcat", autostart: true do |tomcat|
+    tomcat.vm.hostname = "tomcat.pkdevops.com"
+    tomcat.vm.network :private_network, ip: "192.168.251.42"
+      config.vm.provision "shell", path: "environments/test/shell/puppet.sh" 
+      config.vm.provision "puppet" do |puppet|
+         puppet.environment_path = "environments"
+         puppet.environment = "test"
+         puppet.options = "--verbose --debug"
+      end
+  end
+  
+  config.vm.define "gitlabse", autostart: true do |gitlabse|
+    gitlabse.vm.hostname = "gitlabse.pkdevops.com"
+    gitlabse.vm.network :private_network, ip: "192.168.251.44"
+    config.vm.provision "shell", path: "environments/test/shell/provision.sh"       
+  end
+end

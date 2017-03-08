@@ -1,0 +1,13 @@
+{
+  "author": "pkdevops",
+  "dependencies": [],
+  "license": "prokarma",
+  "name": "devops-jenkins",
+  "operatingsystem_support": [centos-7],
+  "project_page": "",
+  "requirements": [],
+  "source": "",
+  "summary": "This project is to build jenkins contionus delivery pipeline",
+  "tags": [],
+  "version": "1.0-SNAPSHOT"
+}
